@@ -1,9 +1,9 @@
 import express from 'express';
-import { createProductCategory, getAllProductCategories, getProductCategoryById, updateProductCategory, deleteProductCategory } from '../controllers/productCategoryController';
+import { createProductCategory, getProductCategories, getProductCategoryById, updateProductCategory, deleteProductCategory } from '../controllers/productCategoryController';
 
 const productCategoryRoutes = express.Router()
 
-productCategoryRoutes.route('/').post(createProductCategory).get(getAllProductCategories)
+productCategoryRoutes.route('/').post(createProductCategory).get(getProductCategories)
 productCategoryRoutes.route('/:id').get(getProductCategoryById).patch(updateProductCategory).delete(deleteProductCategory)
 
 export default productCategoryRoutes

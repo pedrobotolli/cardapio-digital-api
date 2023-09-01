@@ -11,7 +11,7 @@ export async function createProductCategory(req: Request, res: Response, next: N
     }
 }
 
-export async function getAllProductCategories(req: Request, res: Response, next: NextFunction) {
+export async function getProductCategories(req: Request, res: Response, next: NextFunction) {
     try {
         const productCategories = await db.productCategory.findMany();
         return res.status(200).json(productCategories)
