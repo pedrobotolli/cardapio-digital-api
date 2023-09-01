@@ -11,7 +11,7 @@ const app: Express = express();
 //Import route files
 import productCategoryRoutes from "./routes/productCategoryRoutes"
 import productRoutes from "./routes/productRoutes"
-//import orderRoutes from "./routes/orderRoutes"
+import orderRoutes from "./routes/orderRoutes"
 
 
 //Data parsers for the request body
@@ -25,7 +25,7 @@ app.use(cors())
 //Define the route files here
 app.use('/api/categories/', productCategoryRoutes)
 app.use('/api/products/', productRoutes)
-//app.use('/api/orders/', orderRoutes)
+app.use('/api/orders/', orderRoutes)
 
 //Error handling
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
