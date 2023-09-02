@@ -21,7 +21,11 @@ export async function createOrder(req: Request, res: Response, next: NextFunctio
         })
 
         const orderItems = await db.$transaction(
-            req.body.items.map((item: any) => db.orderItem.create({ data: { ...item, orderId: order.id }, include: {product: true}}))
+            req.body.items.map((item:any) => {
+                let {quantity, additionalInfo, productId} = item
+                return db.orderItem.create(
+                { data: { ...{quantity: parseInt(quantity), additionalInfo: additionalInfo, productId: parseInt(productId)}, orderId: String(order.id) }, include: {product: true}
+            })})
         )
 
         return res.status(201).json({...order, orderItems: orderItems});

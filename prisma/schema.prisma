@@ -23,6 +23,7 @@ model Product {
   description String?
   category ProductCategory @relation(fields: [productCategoryId], references: [id])
   productCategoryId Int
+  image String?
   price Decimal
   orderItems OrderItem[]
 }

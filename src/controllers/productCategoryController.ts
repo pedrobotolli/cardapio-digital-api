@@ -13,7 +13,7 @@ export async function createProductCategory(req: Request, res: Response, next: N
 
 export async function getProductCategories(req: Request, res: Response, next: NextFunction) {
     try {
-        const productCategories = await db.productCategory.findMany();
+        const productCategories = await db.productCategory.findMany({include: {products: true}});
         return res.status(200).json(productCategories)
     }
     catch (err) {
@@ -23,7 +23,7 @@ export async function getProductCategories(req: Request, res: Response, next: Ne
 
 export async function getProductCategoryById(req: Request, res: Response, next: NextFunction) {
     try {
-        const productCategory = await db.productCategory.findUnique({ where: { id: Number(req.params.id) } });
+        const productCategory = await db.productCategory.findUnique({ where: { id: Number(req.params.id)}, include: {products: true} });
         return productCategory?res.status(200).json(productCategory):res.status(404).json({error: `Cannot find product category with id =  ${req.params.id}`})
     
     }
