@@ -45,4 +45,13 @@ model Order {
   telephoneNumber String
   ordererName String
   deliveryTime DateTime
+  orderStatus OrderStatus @relation(fields: [orderStatusId], references: [id])
+  orderStatusId Int
+}
+
+model OrderStatus {
+  id Int @id @default(autoincrement())
+  status String 
+  description String?
+  order Order[]
 }
