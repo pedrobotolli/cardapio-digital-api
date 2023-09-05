@@ -7,13 +7,14 @@ export async function createOrder(req: Request, res: Response, next: NextFunctio
     try {
         if (!req.body.items)
             throw new Error(`Invalid order, the "items" property is required and it must be an array`);
-        console.log(typeof(req.body.items))
+        console.log(typeof (req.body.items))
 
         let order = await db.order.create({
             data: {
                 address: req.body.address,
                 telephoneNumber: req.body.telephoneNumber,
                 ordererName: req.body.ordererName,
+                orderStatusId: 1,
                 deliveryTime: add(new Date(), {
                     minutes: 30
                 }).toJSON()
@@ -21,14 +22,16 @@ export async function createOrder(req: Request, res: Response, next: NextFunctio
         })
 
         const orderItems = await db.$transaction(
-            req.body.items.map((item:any) => {
-                let {quantity, additionalInfo, productId} = item
+            req.body.items.map((item: any) => {
+                let { quantity, additionalInfo, productId } = item
                 return db.orderItem.create(
-                { data: { ...{quantity: parseInt(quantity), additionalInfo: additionalInfo, productId: parseInt(productId)}, orderId: String(order.id) }, include: {product: true}
-            })})
+                    {
+                        data: { ...{ quantity: parseInt(quantity), additionalInfo: additionalInfo, productId: parseInt(productId) }, orderId: String(order.id) }, include: { product: true }
+                    })
+            })
         )
 
-        return res.status(201).json({...order, orderItems: orderItems});
+        return res.status(201).json({ ...order, orderItems: orderItems });
     }
     catch (err) {
         next(err)
@@ -47,7 +50,17 @@ export async function getOrders(req: Request, res: Response, next: NextFunction)
 
 export async function getOrderById(req: Request, res: Response, next: NextFunction) {
     try {
-        const order = await db.order.findUnique({ where: { id: String(req.params.id) }, include: { orderItems: {include: {product: true}} } });
+        const order = await db.order.findUnique({
+            where: { id: String(req.params.id) },
+            include: {
+                orderItems: {
+                    include: {
+                        product: true
+                    }
+                },
+                orderStatus: true
+            }
+        });
         return order ? res.status(200).json(order) : res.status(404).json({ error: `Cannot find order with id =  ${req.params.id}` })
     }
     catch (err) {

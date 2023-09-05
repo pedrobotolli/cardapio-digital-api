@@ -12,7 +12,7 @@ const app: Express = express();
 import productCategoryRoutes from "./routes/productCategoryRoutes"
 import productRoutes from "./routes/productRoutes"
 import orderRoutes from "./routes/orderRoutes"
-
+import orderStatusRoutes from "./routes/orderStatusRoutes"
 
 //Data parsers for the request body
 app.use(express.json())
@@ -26,6 +26,7 @@ app.use(cors())
 app.use('/api/categories/', productCategoryRoutes)
 app.use('/api/products/', productRoutes)
 app.use('/api/orders/', orderRoutes)
+app.use('/api/order-status/', orderStatusRoutes)
 
 //Error handling
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
