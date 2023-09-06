@@ -40,7 +40,16 @@ export async function createOrder(req: Request, res: Response, next: NextFunctio
 
 export async function getOrders(req: Request, res: Response, next: NextFunction) {
     try {
-        const orders = await db.order.findMany();
+        const orders = await db.order.findMany({
+            include: {
+                orderItems: {
+                    include: {
+                        product: true
+                    }
+                },
+                orderStatus: true
+            }
+        });
         return res.status(200).json(orders)
     }
     catch (err) {
